@@ -12,7 +12,12 @@
     if (count($_SESSION) > 0) {
         if (true == $_SESSION['loggedin']) {
         ?>
-            <a class="nav-link" href="/crud1/auth.php?logout=1">Logout</a>
+            <a class="nav-link" href="/crud1/auth.php?logout=1">Logout
+                <?php if ($role != '') {
+                    echo "($role)";
+                } else {
+                    echo "(student)";
+                } ?></a>
         <?php }
     } else { ?>
         <a class="nav-link" href="/crud1/auth.php?task=register">Register</a>

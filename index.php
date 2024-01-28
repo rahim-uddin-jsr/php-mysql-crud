@@ -1,9 +1,9 @@
 <?php
+session_start();
 require_once('./inc/connectDb.php');
 require_once('./inc/functions.php');
-session_start();
 // $referrer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
-
+// echo getRole();
 // Check if there are any query parameters in the referring page
 // if (!empty($referrer)) {
 //     $referrerParts = parse_url($referrer);

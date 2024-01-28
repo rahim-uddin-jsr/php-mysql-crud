@@ -34,7 +34,12 @@ if ($_GET['task'] == 'register') {
 }
 
 if (isset($_POST['login_student'])) {
-    if ($_POST['username'] == 'admin' && $_POST['password'] == "pass") {
+
+    $username = mysqli_real_escape_string($conn, $_POST['username']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
+    $isSuccess = userLogin($conn, $username, $password);
+    echo var_dump($isSuccess);
+    if ($isSuccess == true) {
         $_SESSION['loggedin'] = true;
         header('location:/crud1/index.php?task=report');
     } else {

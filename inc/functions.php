@@ -1,5 +1,5 @@
 <?php
-$role = "";
+$role = getRole();
 
 function getStudents($conn)
 {
@@ -112,11 +112,47 @@ function deleteStudent($conn, $id)
 
 function createUser($conn, $name, $password, $role = 'student')
 {
-    $query = "INSERT INTO auth(username,password,role) VALUES('$name','$password','$role')";
+    $hash_pass = password_hash($password, PASSWORD_DEFAULT);
+    $query = "INSERT INTO auth(username,password,role) VALUES('$name','$hash_pass','$role')";
     $result = mysqli_query($conn, $query);
     if ($result) {
         return true;
     } else {
         return false;
+    }
+}
+
+function userLogin($conn, $username, $password)
+{
+    $query = "SELECT * FROM auth WHERE username='$username'";
+    $result = mysqli_query($conn, $query);
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            print_r($row);
+            $hashedPassword = $row['password'];
+            echo $hashedPassword . "</br>";
+            if (password_verify($password, $hashedPassword)) {
+                $_SESSION['role'] = $row['role'];
+                return true;
+            } else {
+                return false;
+            }
+        }
+    } else {
+        echo "user not found";
+        return 'user not found';
+    }
+}
+function getRole()
+{
+    if (count($_SESSION) > 0) {
+        if ($_SESSION['role'] == 'admin') {
+            return 'admin';
+        }
+        if ($_SESSION['role'] == 'editor') {
+            return 'editor';
+        } else {
+            return 'student';
+        }
     }
 }
